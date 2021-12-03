@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Chaves RSA</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1>Chaves RSA</h1>
+    <p>Chave Privada: <br><span id="private_key"></span></p>
+    <p>Chave P&uacute;blica: <br><span id="public_key"></span></p>
+</div>
+
+<form id="key_form">
+    <label for="bits_input">Quantidade de bits</label>
+    <select id="bits_input" form="key_form">
+        <option value="1024">1024</option>
+        <option value="2048">2048</option>
+    </select>
+    <br>
+    <input type="submit" value="Gerar novas chaves">
+</form>
+
+<script src="static/axios.min.js"></script>
+<script>
+    document.getElementById("key_form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var formData = new FormData();
+        var bits = document.getElementById('bits_input').value;
+
+        formData.append("num_bits", bits);
+
+        axios.post('api/keys', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(function(response){
+            document.querySelector('#private_key').innerText = response.data.private;
+            document.querySelector('#public_key').innerText = response.data.public;
+        }).catch(function(error){
+            console.error(error);
+        });
+    })
+</script>
+{% endblock %}

@@ -13,16 +13,16 @@ def chaves_rsa(num_bits):
     pem_public = public_key.public_bytes(encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.PKCS1)
     
-    return pem_private, pem_public
+    return pem_private.decode('UTF-8'), pem_public.decode('UTF-8')
 
 class Keys(Resource):
     def get(self):
         return jsonify({"healthcheck": "health"})
 
     def post(self):
-        num_bits = request.form['num_bits']
+        num_bits = int(request.form['num_bits'])
         private_key, public_key = chaves_rsa(num_bits)
-        return jsonify({'private': str(private_key), 'public': str(public_key)})
+        return jsonify({'private': private_key, 'public': public_key})
 
 app = Flask(__name__)
 api = Api(app)
