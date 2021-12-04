@@ -8,10 +8,16 @@ def chaves_rsa(num_bits):
     pem_private = private_key.private_bytes(encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=serialization.NoEncryption())
+    with open('keys/private_key.pem', 'wb') as f:
+        f.write(pem_private)
+        f.close()
 
     public_key = private_key.public_key()
     pem_public = public_key.public_bytes(encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.PKCS1)
+    with open('keys/public_key.pem', 'wb') as f:
+        f.write(pem_public)
+        f.close()
     
     return pem_private.decode('UTF-8'), pem_public.decode('UTF-8')
 
