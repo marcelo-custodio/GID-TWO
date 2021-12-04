@@ -5,12 +5,14 @@
 {% endblock %}
 
 {% block body %}
+<!-- Saída da aplicação -->
 <div class="content">
     <h1>Chaves RSA</h1>
     <p>Chave Privada: <br><span id="private_key"></span></p>
     <p>Chave P&uacute;blica: <br><span id="public_key"></span></p>
 </div>
 
+<!-- Entrada da aplicação -->
 <form id="key_form">
     <label for="bits_input">Quantidade de bits</label>
     <select id="bits_input" form="key_form">
@@ -21,21 +23,24 @@
     <input type="submit" value="Gerar novas chaves">
 </form>
 
+<!-- Envio das entradas para a API e disponibilização da resposta na saída da aplicação -->
 <script src="static/axios.min.js"></script>
 <script>
     document.getElementById("key_form").addEventListener("submit", function (event) {
         event.preventDefault();
 
+        // Construção do objeto com as entradas da aplicação
         var formData = new FormData();
         var bits = document.getElementById('bits_input').value;
-
         formData.append("num_bits", bits);
 
+        // Envio das entradas para a API
         axios.post('api/keys', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(function(response){
+            // Parse da resposta da API e disponibilização na saída da aplicação
             document.querySelector('#private_key').innerText = response.data.private;
             document.querySelector('#public_key').innerText = response.data.public;
         }).catch(function(error){
